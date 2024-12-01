@@ -1,11 +1,12 @@
-# SSE
+# Separable Scale-Equivariant Object Percetion
 Source codes for article entitled ["Scale-Equivariant Object Perception for Autonomous Driving"](https://ieeexplore.ieee.org/document/10480255).  
 In this repository, we briefly introduce our code and provide additional information to enhance clarity.
 
 ## Environment
 ### Prerequisite
 1. mmcv-full == 2.0.1
-2. mmdetection >= 3.x
+2. mmdetection >= 3.1.0
+    * This repository only includes modified parts of the mmdetection. For complete details, please clone the corresponding version.
 3. mmengine
 4. KITTI Dataset
 
