@@ -4,11 +4,11 @@ import torch.nn.functional as F
 
 '''
 This source code is based on SE_Convolution and modified to achieve separable scale-equivariant convolution.
-Even mask and odd mask are for extracting low and high-frequency feature maps respectively.
+Even indices and odd indices are for extracting low and high-frequency feature maps respectively.
 '''
 class SSEConv_Z2_H(nn.Module):
 
-    def __init__(self, in_channels, out_channels, basis, odd_mask, even_mask, kernel_size,
+    def __init__(self, in_channels, out_channels, basis, odd_indices, even_indices, kernel_size,
                 stride=1, padding=0, permute = True, bias=False,padding_mode='circular'):
         super().__init__()
         self.in_channels = in_channels
@@ -18,13 +18,13 @@ class SSEConv_Z2_H(nn.Module):
         self.padding = padding
         self.padding_mode = padding_mode
         if not permute:
-            self.basis_LF = basis[even_mask]
-            self.basis_HF = basis[odd_mask]
+            self.basis_LF = basis[even_indices]
+            self.basis_HF = basis[odd_indices]
             self.num_funcs_LF = self.basis_LF.size(0)
             self.num_funcs_HF = self.basis_HF.size(0)
         else:
-            self.basis_LF = basis[:,:,even_mask]
-            self.basis_HF = basis[:,:,odd_mask]
+            self.basis_LF = basis[:,:,even_indices]
+            self.basis_HF = basis[:,:,odd_indices]
             self.num_funcs_LF = self.basis_LF.size(2)
             self.num_funcs_HF = self.basis_HF.size(2)
         self.num_scales = self.basis_LF.size(1)
@@ -74,7 +74,7 @@ class SSEConv_Z2_H(nn.Module):
 
 class SSEConv_H_H(nn.Module):
 
-    def __init__(self, in_channels, out_channels, basis, odd_mask, even_mask, scale_size, kernel_size,
+    def __init__(self, in_channels, out_channels, basis, odd_indices, even_indices, scale_size, kernel_size,
                 stride=1, padding=0, permute = True, bias=False,padding_mode='circular',res=False,pool=True):
         super().__init__()
         self.in_channels = in_channels
@@ -85,13 +85,13 @@ class SSEConv_H_H(nn.Module):
         self.padding = padding
         self.padding_mode = padding_mode
         if not permute:
-            self.basis_LF = basis[even_mask]
-            self.basis_HF = basis[odd_mask]
+            self.basis_LF = basis[even_indices]
+            self.basis_HF = basis[odd_indices]
             self.num_funcs_LF = self.basis_LF.size(0)
             self.num_funcs_HF = self.basis_HF.size(0)
         else:
-            self.basis_LF = basis[:,:,even_mask]
-            self.basis_HF = basis[:,:,odd_mask]
+            self.basis_LF = basis[:,:,even_indices]
+            self.basis_HF = basis[:,:,odd_indices]
             self.num_funcs_LF = self.basis_LF.size(2)
             self.num_funcs_HF = self.basis_HF.size(2)
         self.num_scales = self.basis_LF.size(1)

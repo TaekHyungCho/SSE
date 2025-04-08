@@ -12,7 +12,7 @@ from plugin.utils.basis import get_basis
 class SSE_ResBlock(BaseModule):
 
     def __init__(self,in_channels,out_channels,basis,
-                odd_mask,even_mask,scale_size,
+                odd_indices,even_indices,scale_size,
                 stride,expansion,permute=True,downsample=None,init_cfg=None):
 
         super(SSE_ResBlock,self).__init__(init_cfg)
@@ -57,8 +57,8 @@ class SSE_ResBlock(BaseModule):
                             kernel_size=3,padding=1,stride=stride,
                             scale_size=scale_size,
                             basis = basis,
-                            odd_mask= odd_mask,
-                            even_mask = even_mask,
+                            odd_indices= odd_indices,
+                            even_indices = even_indices,
                             permute = permute,
                             res = True),
                         nn.BatchNorm3d(out_channels),
@@ -117,8 +117,8 @@ class SSE_ResNet(BaseModule):
                 depth,
                 save_dir,
                 filename,
-                odd_mask,
-                even_mask,
+                odd_indices,
+                even_indices,
                 scale_size = 1,
                 base_channels = 64,
                 strides=(1, 2, 2, 2),
@@ -135,8 +135,8 @@ class SSE_ResNet(BaseModule):
         self.strides = strides
         self.out_indices = out_indices
         self.norm_eval = norm_eval
-        self.odd_mask = odd_mask
-        self.even_mask = even_mask
+        self.odd_indices = odd_indices
+        self.even_indices = even_indices
         self.blocks,self.layers,self.expansion= self.arch_settings[depth]
         self.scale_size = scale_size
         self.permute = permute
@@ -149,8 +149,8 @@ class SSE_ResNet(BaseModule):
                 in_channels= 3,
                 out_channels = 64,
                 basis = self.basis_Z2_H,
-                odd_mask = self.odd_mask,
-                even_mask = self.even_mask,
+                odd_indices = self.odd_indices,
+                even_indices = self.even_indices,
                 kernel_size = 7,
                 stride = 2,
                 padding = 3,
@@ -184,8 +184,8 @@ class SSE_ResNet(BaseModule):
                                     basis = self.basis,
                                     scale_size = self.scale_size,
                                     stride = stride,
-                                    odd_mask = self.odd_mask,
-                                    even_mask = self.even_mask,
+                                    odd_indices = self.odd_indices,
+                                    even_indices = self.even_indices,
                                     downsample = True,
                                     expansion = expansion,
                                     permute = self.permute))
@@ -198,8 +198,8 @@ class SSE_ResNet(BaseModule):
                                          out_channels=out_channels,
                                          basis=self.basis,
                                          scale_size=self.scale_size,
-                                         odd_mask = self.odd_mask,
-                                         even_mask = self.even_mask,
+                                         odd_indices = self.odd_indices,
+                                         even_indices = self.even_indices,
                                          stride=1,
                                          expansion=expansion,
                                          permute = self.permute))
